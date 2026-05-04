@@ -2209,7 +2209,8 @@ class AntMember : ModelTask() {
         return when (task.optString("taskId")) {
             "AP11249033", // 逛蛋定生财去签到
             "AP10247402", // 逛逛稳健理财领红包
-            "AP13250426"  // 逛定期市场领红包
+            "AP13250426", // 逛定期市场领红包
+            "AP15280470"  // 逛蚂蚁投教基地
             -> true
 
             else -> false
