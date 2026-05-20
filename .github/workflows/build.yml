@@ -1,0 +1,10 @@
+name: BuildAG
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev  # 打包时自动切到dev分支
+      - run: echo "成功"
