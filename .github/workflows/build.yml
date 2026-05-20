@@ -1,10 +1,36 @@
 name: BuildAG
 on: workflow_dispatch
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # 1. 强制拉取dev分支源码（打包AG必须用dev）
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
         with:
-          ref: dev  # 打包时自动切到dev分支
-      - run: echo "成功"
+          ref: dev
+          fetch-depth: 0
+
+      # 2. 配置安卓打包环境（和原作者环境完全一致）
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17.0.1'
+          distribution: 'oracle'
+          cache: gradle
+
+      # 3. 给打包脚本权限
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      # 4. 编译Release包（arm64-v8a架构，就是你要的AG包）
+      - name: Build AG Release APK
+        run: ./gradlew assembleRelease --stacktrace
+
+      # 5. 打包完成后上传APK，运行结束直接下载
+      - name: Upload AG APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sesame-AG-dev-release
+          path: app/build/outputs/apk/release/
